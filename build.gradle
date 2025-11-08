@@ -18,10 +18,11 @@ buildscript {
 
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.3.0'
+	id 'org.springframework.boot' version '3.5.7'
 	id 'io.spring.dependency-management' version '1.1.7'
 
 	id 'nu.studer.jooq' version '9.0'
+	id 'jvm-test-suite'
 }
 
 group = 'com.kiran'
@@ -44,12 +45,40 @@ repositories {
 	mavenCentral()
 }
 
+testing {
+	suites {
+		integrationTest(JvmTestSuite) {
+			dependencies {
+				implementation project()
+				compileOnly 'org.projectlombok:lombok'
+				annotationProcessor 'org.projectlombok:lombok'
+			}
+
+			targets {
+				all {
+					testTask.configure {
+						useJUnitPlatform()
+						shouldRunAfter(test)
+					}
+				}
+			}
+		}
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+	systemProperty 'TESTCONTAINERS_RYUK_DISABLED', 'true'
+}
+
+
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	//implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	compileOnly "org.projectlombok:lombok:$lombokVersion"
+	compileOnly 'org.projectlombok:lombok'
 	//runtimeOnly 'io.micrometer:micrometer-registry-otlp'
 	// https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13'
@@ -64,20 +93,21 @@ dependencies {
 	implementation 'org.flywaydb:flyway-core'
 	runtimeOnly "org.postgresql:postgresql:42.7.1"
 
-	jooqGenerator 'org.postgresql:postgresql'
+	// Explicitly specify jOOQ generator dependencies with the same version
+	jooqGenerator 'org.jooq:jooq-codegen:3.19.8'
+	jooqGenerator 'org.jooq:jooq-meta:3.19.8'
+	jooqGenerator 'org.postgresql:postgresql:42.7.1'
 	jooqGenerator 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
 
-	annotationProcessor "org.projectlombok:lombok:$lombokVersion"
-
-	testImplementation "org.testcontainers:testcontainers:$testContainersVersion"
-	testImplementation "org.testcontainers:postgresql:$testContainersVersion"
-
-
+	annotationProcessor "org.projectlombok:lombok"
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testImplementation 'org.testcontainers:junit-jupiter'
+	testImplementation 'org.testcontainers:kafka'
+	testImplementation 'org.testcontainers:postgresql'
 }
 
 
@@ -90,6 +120,14 @@ configurations.all {
 	}
 }
 
+configurations {
+	integrationTestCompileOnly.extendsFrom compileOnly
+	integrationTestImplementation.extendsFrom implementation
+	integrationTestAnnotationProcessor.extendsFrom annotationProcessor
+	integrationTestImplementation.extendsFrom testImplementation
+	integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
+}
+
 ext {
 	postgresContainer = null
 	containerJdbcUrl = null
@@ -98,14 +136,11 @@ ext {
 }
 
 
-tasks.named('test') {
-	useJUnitPlatform()
-}
-
 //JOOQ
 
-import org.testcontainers.containers.PostgreSQLContainer
+
 import org.flywaydb.core.Flyway
+import org.testcontainers.containers.PostgreSQLContainer
 
 task startPostgresContainer {
 	doLast {
