@@ -92,16 +92,21 @@ Notes & troubleshooting when generating jOOQ:
 ## Development tips
 
 - Keep `application.properties` values for local development, but use environment variables or secret stores for tokens and production DB credentials.
+- The application now fetches the StockData API token from Google Cloud Secret Manager with automatic caching. See `SECRETS_MANAGER_SETUP.md` for detailed setup instructions and caching configuration.
+- **Troubleshooting Secret Manager issues?** See `TROUBLESHOOTING_SECRET_MANAGER.md` for detailed debugging steps and solutions.
+- For local testing, authenticate with `gcloud auth application-default login` and ensure you have access to the secret in GCP.
+- Configure `GCP_PROJECT_ID` and `API_TOKEN_SECRET_ID` environment variables for your environment.
+- Enable diagnostics by setting `gcp.diagnostics.enabled=true` in `application.properties` to debug authentication issues.
 - When debugging Flyway/jOOQ in the Gradle script, enable Gradle info/trace logging to view classpath and Flyway logs (`-i` or `--stacktrace` / `--debug`).
 
 ## Where to look next
 - SQL migrations: `src/main/resources/db/migration`
 - jOOQ configuration: `build.gradle` (the `jooq` block and the `tasks.withType(nu.studer.gradle.jooq.JooqGenerate)` configuration)
 - REST client wiring: `config/StockdataConfig.java` and `stockdata/api/client`
+- Secret Manager setup: `SECRETS_MANAGER_SETUP.md`
 
 If you want, I can:
 - Add example cURL commands for the `/quotes` endpoint.
-- Add a small `README` section describing how to supply the `quote-client.api-token` securely for local testing.
 - Run the Gradle jOOQ generation task here and paste logs (if you want me to run it).
 
 ---

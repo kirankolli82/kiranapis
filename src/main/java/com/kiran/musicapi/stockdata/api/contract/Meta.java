@@ -10,13 +10,12 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 public final class Meta {
-    private final int requested;
-    private final int returned;
+	private final int requested;
+	private final int returned;
 
-    @JsonCreator
-    public Meta(@JsonProperty("requested") int requested,
-                @JsonProperty("returned") int returned) {
-        this.requested = requested;
-        this.returned = returned;
-    }
+	@JsonCreator
+	public Meta(@JsonProperty("requested") int requested, @JsonProperty("returned") int returned) {
+		this.requested = requested;
+		this.returned = returned;
+	}
 }

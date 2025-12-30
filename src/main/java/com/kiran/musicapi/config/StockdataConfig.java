@@ -11,25 +11,21 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-
 @Slf4j
 @Configuration
 @EnableConfigurationProperties(QuoteClientProperties.class)
 @AllArgsConstructor
 public class StockdataConfig {
 
-    private final QuoteClientProperties quoteClientProperties;
-    private final QuoteClientRequestFilter quoteClientRequestFilter;
-    private final ObjectMapper objectMapper;
+	private final QuoteClientProperties quoteClientProperties;
+	private final QuoteClientRequestFilter quoteClientRequestFilter;
+	private final ObjectMapper objectMapper;
 
-    @Bean
-    public QuoteClient quoteClient(){
-        var client = ClientBuilder.newBuilder()
-                .register(quoteClientRequestFilter)
-                .build();
-        var target = client.target(quoteClientProperties.baseUrl());
-        return ((ResteasyWebTarget) target).proxy(QuoteClient.class);
-    }
-
+	@Bean
+	public QuoteClient quoteClient() {
+		var client = ClientBuilder.newBuilder().register(quoteClientRequestFilter).build();
+		var target = client.target(quoteClientProperties.baseUrl());
+		return ((ResteasyWebTarget) target).proxy(QuoteClient.class);
+	}
 
 }

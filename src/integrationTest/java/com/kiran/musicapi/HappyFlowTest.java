@@ -14,24 +14,22 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 public class HappyFlowTest {
 
-    @Container
-    static KafkaContainer KAFKA_CONTAINER = new KafkaContainer();
+	@Container
+	static KafkaContainer KAFKA_CONTAINER = new KafkaContainer();
 
-    @Container
-    static PostgresContainer POSTGRESDB_CONTAINER = new PostgresContainer();
+	@Container
+	static PostgresContainer POSTGRESDB_CONTAINER = new PostgresContainer();
 
-    @DynamicPropertySource
-    static void properties(DynamicPropertyRegistry registry) {
-        registry.add("spring.kafka.bootstrap-servers", KAFKA_CONTAINER::getBootstrapServers);
-        registry.add("spring.datasource.url", POSTGRESDB_CONTAINER::getJdbcUrl);
-        registry.add("spring.datasource.username", POSTGRESDB_CONTAINER::getUsername);
-        registry.add("spring.datasource.password", POSTGRESDB_CONTAINER::getPassword);
-    }
+	@DynamicPropertySource
+	static void properties(DynamicPropertyRegistry registry) {
+		registry.add("spring.kafka.bootstrap-servers", KAFKA_CONTAINER::getBootstrapServers);
+		registry.add("spring.datasource.url", POSTGRESDB_CONTAINER::getJdbcUrl);
+		registry.add("spring.datasource.username", POSTGRESDB_CONTAINER::getUsername);
+		registry.add("spring.datasource.password", POSTGRESDB_CONTAINER::getPassword);
+	}
 
-
-
-    @Test
-    public void testHappy(){
-        Assertions.assertTrue(true);
-    }
+	@Test
+	public void testHappy() {
+		Assertions.assertTrue(true);
+	}
 }

@@ -23,6 +23,7 @@ plugins {
 
 	id 'nu.studer.jooq' version '9.0'
 	id 'jvm-test-suite'
+	id 'com.diffplug.spotless' version '6.25.0'
 }
 
 group = 'com.kiran'
@@ -71,6 +72,17 @@ tasks.named('test') {
 	systemProperty 'TESTCONTAINERS_RYUK_DISABLED', 'true'
 }
 
+spotless {
+	java {
+		target 'src/**/*.java'
+		eclipse()
+		removeUnusedImports()
+		trimTrailingWhitespace()
+		endWithNewline()
+	}
+}
+
+
 
 
 dependencies {
@@ -78,6 +90,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	//implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
 	compileOnly 'org.projectlombok:lombok'
 	//runtimeOnly 'io.micrometer:micrometer-registry-otlp'
 	// https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
@@ -92,6 +105,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jooq'
 	implementation 'org.flywaydb:flyway-core'
 	runtimeOnly "org.postgresql:postgresql:42.7.1"
+
+	implementation 'com.google.cloud:google-cloud-secretmanager:2.40.0'
 
 	// Explicitly specify jOOQ generator dependencies with the same version
 	jooqGenerator 'org.jooq:jooq-codegen:3.19.8'
