@@ -33,7 +33,9 @@ Package structure for REST API classes
 Coding patterns & style (baseline)
 - Follow Google Code Sytle for Java (https://google.github.io/styleguide/javaguide.html) unless overridden here.
 - When creating java POJOs prefer java Record classes unless the POJO contains BigDecimal or ZonedDateTime fields.
-- If a Java POJO has BigDecimal or ZonedDateTime fields, prefer using Lombok annotations - Getter, EqualsHashCode, ToString, AllArgsConstructor, Builder (with toBuilder).
+- All record classes must have Lombok @Builder annotation.
+- All POJO classes must have Lombok @Builder, @Getter, @ToString, and @EqualsHashCode annotations.
+- If a Java POJO has BigDecimal or ZonedDateTime fields, also include @AllArgsConstructor and use @Builder with toBuilder parameter.
 - Further to the above point the BigDecimal fields must be excluded from EqualsAndHashCode using Lombok's @EqualsAndHashCode.Exclude and instead add a getter method that returns the BigDecimal with stripped trailing zeros(if not null). 
   This method must be added to EqualsAndHashCode using Lombok's @EqualsAndHashCode.Include annotation. Add a jackson JsonIgnore annotation to this method to avoid serialization issues.
 - Similarly ZonedDateTime fields  must be excluded from EqualsAndHashCode using Lombok's @EqualsAndHashCode.Exclude and instead add a getter method that returns Instant fields.
@@ -51,6 +53,9 @@ Coding patterns & style (baseline)
 Tests & integration
 - New features must include unit tests in src/test/java. For infra-related changes (DB, Kafka), include integration tests in src/integrationTest/java and reuse existing Testcontainers setup.
 - When creating containers use the project's existing container classes (e.g. PostgresContainer, KafkaContainer) and testcontainers properties under src/integrationTest/resources.
+- All JUnit tests must have @DisplayName annotation describing what the unit test does in a concise manner.
+- Split each unit test into given, when, then sections with clear javadocs (// Given:, // When:, // Then:) explaining what each section attempts to do.
+- Add javadoc on top of each unit test class that describes in tabular format (markdown style, non-HTML) the list of tests being performed and expected results.
 
 Build & verification
 - Do not run verification commands yourself and instead ask the user to run them.
