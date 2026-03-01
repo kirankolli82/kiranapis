@@ -115,8 +115,9 @@ spring.datasource.password=postgres
 - 📖 **[Quick Start Guide](docs/QUICKSTART.md)** - Comprehensive getting started guide
 - 🔧 **[Multi-Module Structure](docs/MULTI_MODULE_STRUCTURE.md)** - Project structure details
 - 🔐 **[Secret Manager Setup](docs/SECRETS_MANAGER_SETUP.md)** - GCP Secret Manager integration guide
-- 🐛 **[Troubleshooting Secret Manager](docs/TROUBLESHOOTING_SECRET_MANAGER.md)** - Debug GCP authentication issues
-- 📋 **[Migration Checklist](docs/MIGRATION_CHECKLIST.md)** - Multi-module migration history
+- � **[API Token GCP Flow](docs/API_TOKEN_GCP_FLOW.md)** - How API tokens are fetched from GCP Secret Manager at request time
+- �🐛 **[Troubleshooting Secret Manager](docs/TROUBLESHOOTING_SECRET_MANAGER.md)** - Debug GCP authentication issues
+
 
 ## Project Structure
 

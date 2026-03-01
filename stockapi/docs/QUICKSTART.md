@@ -146,7 +146,6 @@ Module names are prefixed with `:` (e.g., `:stockapi`)
 ## 🆘 Need Help?
 
 - Check **[TROUBLESHOOTING_SECRET_MANAGER.md](TROUBLESHOOTING_SECRET_MANAGER.md)** for GCP issues
-- Check **[MIGRATION_CHECKLIST.md](MIGRATION_CHECKLIST.md)** for migration-related questions
 - Run `./gradlew.bat :stockapi:tasks` to see all available tasks
 - Run `./gradlew.bat help --task <taskname>` for task details
 
